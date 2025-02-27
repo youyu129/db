@@ -57,7 +57,7 @@ class DB
     public function all(...$arg)
     {
         $sql = "select * from $this->table ";
-        if (! empty($arg[0]) && in_array($arg[0])) {
+        if (! empty($arg[0]) && is_array($arg[0])) {
             $tmp = $this->a2s($arg[0]);
             $sql .= " where " . join(" && ", $tmp);
         } else if (isset($arg[0]) && is_string($arg[0])) {
@@ -77,7 +77,7 @@ class DB
             $tmp = $this->a2s($array);
             $sql .= " where " . join(" && ", $tmp);
         } else {
-            $sql = $sql+" where `id`='$array'";
+            $sql .= " where `id`='$array'";
         }
         return $this->pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
     }
@@ -104,9 +104,9 @@ class DB
         $sql = "DELETE from $this->table ";
         if (is_array($array)) {
             $tmp = $this->a2s($array);
-            $sql = $sql+" where " . join(" && ", $tmp);
+            $sql .= " where " . join(" && ", $tmp);
         } else {
-            $sql = $sql+" where `id`='$array'";
+            $sql .= " where `id`='$array'";
         }
         return $this->pdo->exec($sql);
     }
@@ -117,20 +117,15 @@ class DB
         $sql = "SELECT count(*) FROM $this->table ";
         if (! empty($arg[0])) {
             if (is_array($arg[0])) {
-
                 $where = $this->a2s($arg[0]);
                 $sql   = $sql . " WHERE " . join(" AND ", $where);
             } else {
-                //$sql=$sql.$arg[0];
                 $sql .= $arg[0];
-
             }
         }
-
         if (! empty($arg[1])) {
             $sql = $sql . $arg[1];
         }
-
         return $this->pdo->query($sql)->fetchColumn();
     }
 

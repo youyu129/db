@@ -1,5 +1,5 @@
 <?php
-date_default_timezone_set('Asia/Taipei');
+date_default_timezone_set("Asia/Taipei");
 session_start();
 
 class DB
@@ -16,27 +16,27 @@ class DB
 
     public function all(...$arg)
     {
-        $sql = "select * from $this->table ";
+        $sql = "SELECT * FROM $this->table ";
         if (! empty($arg[0]) && is_array($arg[0])) {
             $tmp = $this->a2s($arg[0]);
-            $sql .= " where " . join(" && ", $tmp);
+            $sql .= " WHERE " . join(" && ", $tmp);
         } else if (isset($arg[0]) && is_string($arg[0])) {
             $sql .= $arg[0];
         }
         if (! empty($arg[1])) {
             $sql .= $arg[1];
         }
-        return $this->pdo->query($sql)->fetchALL(PDO::FETCH_ASSOC);
+        return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function find($array)
     {
-        $sql = "select * from $this->table ";
+        $sql = "SELECT * FROM $this->table ";
         if (is_array($array)) {
             $tmp = $this->a2s($array);
-            $sql .= " where " . join(" && ", $tmp);
+            $sql .= " WHERE " . join(" && ", $tmp);
         } else {
-            $sql .= " where `id`='$array'";
+            $sql .= " WHERE `id`='$array'";
         }
         return $this->pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
     }
@@ -47,23 +47,23 @@ class DB
             $id = $array['id'];
             unset($array['id']);
             $tmp = $this->a2s($array);
-            $sql = "UPDATE $this->table set " . join(",", $tmp) . " where `id`='$id'";
+            $sql = "UPDATE $this->table SET " . join(",", $tmp) . " WHERE `id`='$id'";
         } else {
             $keys   = join("`,`", array_keys($array));
             $values = join("','", $array);
-            $sql    = "INSERT INTO $this->table (`{$keys}`) values('{$values}')";
+            $sql    = "INSERT INTO $this->table (`{$keys}`) VALUES('{$values}')";
         }
         return $this->pdo->exec($sql);
     }
 
     public function del($array)
     {
-        $sql = "DELETE from $this->table ";
+        $sql = "DELETE FROM $this->table ";
         if (is_array($array)) {
             $tmp = $this->a2s($array);
-            $sql .= " where " . join(" && ", $tmp);
+            $sql .= " WHERE " . join(" && ", $tmp);
         } else {
-            $sql .= " where `id`='$array'";
+            $sql .= " WHERE `id`='$array'";
         }
         return $this->pdo->exec($sql);
     }
@@ -73,14 +73,14 @@ class DB
         $sql = "SELECT count(*) FROM $this->table ";
         if (! empty($arg[0])) {
             if (is_array($arg[0])) {
-                $where = $this->a2s($arg[0]);
-                $sql   = $sql . " WHERE " . join(" AND ", $where);
+                $tmp = $this->a2s($arg[0]);
+                $sql .= " WHERE " . join(" && ", $tmp);
             } else {
                 $sql .= $arg[0];
             }
         }
         if (! empty($arg[1])) {
-            $sql = $sql . $arg[1];
+            $sql .= $arg[1];
         }
         return $this->pdo->query($sql)->fetchColumn();
     }
@@ -99,18 +99,18 @@ function q($sql)
 {
     $dsn = "mysql:host=localhost;charset=utf8;dbname=db13";
     $pdo = new PDO($dsn, 'root', '');
-    return $pdo->query($sql)->fetchALL();
+    return $pdo->query($sql)->fetchAll();
 }
 function sum($sql)
 {
-    $dsn = "mysql:host=localhost;chartset=utf8;dbname=db13";
+    $dsn = "mysql:host=localhost;charset=utf8;dbname=db13";
     $pdo = new PDO($dsn, 'root', '');
     return $pdo->query($sql)->fetchColumn();
 }
 
 function to($url)
 {
-    header('location:' . $url);
+    header("location:" . $url);
 }
 
 function dd($array)

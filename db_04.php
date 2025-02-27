@@ -85,6 +85,7 @@ class DB
             $keys   = join("`,`", array_keys($array));
             $values = join("','", $array);
             $sql    = "insert into $this->table (`{$keys}`) values('{$values}')";
+ 
         }
         return $this->pdo->exec($sql);
     }

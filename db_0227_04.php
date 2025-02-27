@@ -20,15 +20,14 @@ class DB
         if (! empty($arg[0]) && is_array($arg[0])) {
             $tmp = $this->a2s($arg[0]);
             $sql .= " WHERE " . join(" && ", $tmp);
-        } else if (isset($arg[0]) && is_string($arg[0])) {
-            $sql .= $arg[0];
-        }
+            } else if (isset($arg[0]) && is_string($arg[0])) {
+                $sql .= $arg[0];
+            }
         if (! empty($arg[1])) {
             $sql .= $arg[1];
         }
         return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     }
-
     public function find($array)
     {
         $sql = "SELECT * FROM $this->table ";
@@ -40,7 +39,6 @@ class DB
         }
         return $this->pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
     }
-
     public function save($array)
     {
         if (isset($array['id'])) {
@@ -55,7 +53,6 @@ class DB
         }
         return $this->pdo->exec($sql);
     }
-
     public function del($array)
     {
         $sql = "DELETE FROM $this->table ";
@@ -67,7 +64,6 @@ class DB
         }
         return $this->pdo->exec($sql);
     }
-
     public function count(...$arg)
     {
         $sql = "SELECT count(*) FROM $this->table ";
@@ -76,9 +72,9 @@ class DB
                 $tmp = $this->a2s($arg[0]);
                 $sql .= " WHERE " . join(" && ", $tmp);
             } else {
-                $sql .= $arg[0];
-            }
+            $sql .= $arg[0];
         }
+    }
         if (! empty($arg[1])) {
             $sql .= $arg[1];
         }
@@ -119,20 +115,4 @@ function dd($array)
     print_r($array);
     echo "</pre>";
 }
-
-$Total = new DB('total');
-$User  = new DB('users');
-$News  = new DB('news');
-$Que   = new DB('que');
-$Log   = new DB('log');
-
-if (! isset($_SESSION['view'])) {
-    if ($Total->count(['day' => date("Y-m-d")]) > 0) {
-        $total = $Total->find(['day' => date("Y-m-d")]);
-        $total['total']++;
-        $Total->save($total);
-    } else {
-        $Total->save(['day' => date("Y-m-d"), 'total' => 1]);
-    }
-    $_SESSION['view'] = 1;
-}
+?>

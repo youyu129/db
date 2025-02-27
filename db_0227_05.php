@@ -69,17 +69,20 @@ class DB
         }
         return $this->pdo->exec($sql);
     }
+    
     public function count(...$arg)
     {
         $sql = "SELECT count(*) FROM $this->table ";
-        if(! empty($arg[0]) && is_array($arg[0])) {
-            $tmp = $this->a2s($arg[0]);
-            $sql .= " WHERE " . join(" && ", $tmp);
+        // if(! empty($arg[0]) && is_array($arg[0])) {
+        if (! empty($arg[0])) {
+            if (is_array($arg[0])) {
+                $tmp = $this->a2s($arg[0]);
+                $sql .= " WHERE " . join(" && ", $tmp);
         // }else if(isset($arg[0]) && is_string($arg[0])){
-        } else {
-            $sql .= $arg[0];
+            } else {
+                $sql .= $arg[0];
+            }
         }
-    
         // if(isset($arg[1])){
         if (! empty($arg[1])) {
             $sql .= $arg[1];

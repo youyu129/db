@@ -1,4 +1,6 @@
 <?php
+// 22分5秒 完成
+
 date_default_timezone_set("Asia/Taipei");
 session_start();
 
@@ -11,7 +13,9 @@ class DB
     public function __construct($table)
     {
         $this->table = $table;
+        // $this->pdo = new PDO(PDO::FETCH_ASSOC);
         $this->pdo = new PDO($this->dsn, 'root', '');
+
     }
 
     public function all(...$arg)
@@ -20,9 +24,10 @@ class DB
         if (! empty($arg[0]) && is_array($arg[0])) {
             $tmp = $this->a2s($arg[0]);
             $sql .= " WHERE " . join(" && ", $tmp);
-            } else if (isset($arg[0]) && is_string($arg[0])) {
-                $sql .= $arg[0];
-            }
+        } else if (isset($arg[0]) && is_string($arg[0])) {
+            $sql .= $arg[0];
+        }
+        // if(isset($arg[1])){
         if (! empty($arg[1])) {
             $sql .= $arg[1];
         }
@@ -47,9 +52,9 @@ class DB
             $tmp = $this->a2s($array);
             $sql = "UPDATE $this->table SET " . join(",", $tmp) . " WHERE `id`='$id'";
         } else {
-            $keys   = join("`,`", array_keys($array));
-            $values = join("','", $array);
-            $sql    = "INSERT INTO $this->table (`{$keys}`) VALUES('{$values}')";
+        $keys   = join("`,`", array_keys($array));
+        $values = join("','", $array);
+        $sql    = "INSERT INTO $this->table (`{$keys}`) VALUES('{$values}')";
         }
         return $this->pdo->exec($sql);
     }
@@ -67,20 +72,21 @@ class DB
     public function count(...$arg)
     {
         $sql = "SELECT count(*) FROM $this->table ";
-        if (! empty($arg[0])) {
-            if (is_array($arg[0])) {
-                $tmp = $this->a2s($arg[0]);
-                $sql .= " WHERE " . join(" && ", $tmp);
-            } else {
+        if(! empty($arg[0]) && is_array($arg[0])) {
+            $tmp = $this->a2s($arg[0]);
+            $sql .= " WHERE " . join(" && ", $tmp);
+        // }else if(isset($arg[0]) && is_string($arg[0])){
+        } else {
             $sql .= $arg[0];
-            }
         }
+    
+        // if(isset($arg[1])){
         if (! empty($arg[1])) {
             $sql .= $arg[1];
         }
         return $this->pdo->query($sql)->fetchColumn();
     }
-
+    
     public function a2s($array)
     {
         $tmp = [];
@@ -94,12 +100,14 @@ class DB
 function q($sql)
 {
     $dsn = "mysql:host=localhost;charset=utf8;dbname=db13";
+    // $pdo = new PDO(PDO::FETCH_ASSOC);
     $pdo = new PDO($dsn, 'root', '');
     return $pdo->query($sql)->fetchAll();
 }
 function sum($sql)
 {
     $dsn = "mysql:host=localhost;charset=utf8;dbname=db13";
+    // $pdo = new PDO(PDO::FETCH_ASSOC);
     $pdo = new PDO($dsn, 'root', '');
     return $pdo->query($sql)->fetchColumn();
 }
@@ -115,4 +123,5 @@ function dd($array)
     print_r($array);
     echo "</pre>";
 }
+
 ?>

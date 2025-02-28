@@ -2,7 +2,8 @@
 date_default_timezone_set("Asia/Taipei");
 session_start();
 
-class DB{
+class DB
+{
     protected $dsn = "mysql:host=localhost;charset=utf8;dbname=db13";
     protected $pdo;
     protected $table;
@@ -15,11 +16,11 @@ class DB{
 
     public function all(...$arg)
     {
-        $sql="SELECT * FROM $this->table ";
-        if(! empty($arg[0]) && is_array($arg[0])){
+        $sql = "SELECT * FROM $this->table ";
+        if (! empty($arg[0]) && is_array($arg[0])) {
             $tmp = $this->a2s($arg[0]);
             $sql .= " WHERE " . join(" && ", $tmp);
-        } else if (isset($arg[0]) && is_string($arg[0])){
+        } else if (isset($arg[0]) && is_string($arg[0])) {
             $sql .= $arg[0];
         }
         if (! empty($arg[1])) {
@@ -31,7 +32,7 @@ class DB{
     public function find($array)
     {
         $sql = "SELECT * FROM $this->table ";
-        if (isset($array) && is_array($array)) {
+        if (is_array($array)) {
             $tmp = $this->a2s($array);
             $sql .= " WHERE " . join(" && ", $tmp);
         } else {
@@ -42,7 +43,7 @@ class DB{
 
     public function save($array)
     {
-        if (isset($array['id'])){
+        if (isset($array['id'])) {
             $id = $array['id'];
             unset($array['id']);
             $tmp = $this->a2s($array);
@@ -58,7 +59,7 @@ class DB{
     public function del($array)
     {
         $sql = "DELETE FROM $this->table ";
-        if (isset($array) && is_array($array)){
+        if (is_array($array)) {
             $tmp = $this->a2s($array);
             $sql .= " WHERE " . join(" && ", $tmp);
         } else {
@@ -78,13 +79,14 @@ class DB{
             $sql .= $arg[0];
         }
     }
-        if (! empty($arg[1])){
+        if (! empty($arg[1])) {
             $sql .= $arg[1];
         }
         return $this->pdo->query($sql)->fetchColumn();
     }
 
-    public function a2s($array){
+    public function a2s($array)
+    {
         $tmp = [];
         foreach ($array as $key => $value) {
             $tmp[] = "`$key`='$value'";

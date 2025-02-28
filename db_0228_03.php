@@ -27,12 +27,13 @@ class DB
             $sql .= $arg[1];
         }
         return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-    }    public function find($array)
+    }
+    public function find($array)
     {
         $sql = "SELECT * FROM $this->table ";
         if (is_array($array)) {
             $tmp = $this->a2s($array);
-            $sql .= " WHERE " . join(" && ", $tmp);
+            $sql .= " WHERE " . join(" && ", $tmp); 
         } else {
             $sql .= " WHERE `id`='$array'";
         }
@@ -57,7 +58,7 @@ class DB
         $sql = "DELETE FROM $this->table ";
         if (is_array($array)) {
             $tmp = $this->a2s($array);
-            $sql .= " WHERE " . join(" && ", $tmp);
+            $sql .= " WHERE " . join(" && ", $tmp); 
         } else {
             $sql .= " WHERE `id`='$array'";
         }
@@ -70,7 +71,6 @@ class DB
             if (is_array($arg[0])) {
                 $tmp = $this->a2s($arg[0]);
                 $sql .= " WHERE " . join(" && ", $tmp);
-            // }else if(isset($arg[0]) && is_string($arg[0])){
             } else {
                 $sql .= $arg[0];
             }
@@ -80,6 +80,7 @@ class DB
         }
         return $this->pdo->query($sql)->fetchColumn();
     }
+
     public function a2s($array)
     {
         $tmp = [];
@@ -102,7 +103,6 @@ function sum($sql)
     $pdo = new PDO($dsn, 'root', '');
     return $pdo->query($sql)->fetchColumn();
 }
-
 function to($url)
 {
     header("location:" . $url);
